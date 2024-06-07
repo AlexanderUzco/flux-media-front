@@ -5,6 +5,7 @@ import Dashboard from '../screens/Dashboard';
 import PrivateRoute from '../components/PrivateRoute';
 import Layout from '../components/Layout';
 import SignIn from '../screens/Signin';
+import Category from '../screens/Category';
 
 const AppRouter: React.FC = () => {
   return (
@@ -18,15 +19,6 @@ const AppRouter: React.FC = () => {
         path='/signin'
         element={<SignIn />}
       />
-      <Route
-        path='/'
-        element={
-          <Navigate
-            to='/dashboard'
-            replace
-          />
-        }
-      />
 
       {/* Private route using PrivateRoute component */}
       <Route element={<Layout />}>
@@ -39,11 +31,14 @@ const AppRouter: React.FC = () => {
             />
           }
         />
-        {/* Private route using PrivateRoute component */}
         <Route
           path='/'
           element={<PrivateRoute />}
         >
+          <Route
+            path='/category'
+            element={<Category />}
+          />
           <Route
             path='/dashboard'
             element={<Dashboard />}

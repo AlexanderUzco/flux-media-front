@@ -1,11 +1,15 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 interface IDropzoneFrontpage {
   setFiles: React.Dispatch<React.SetStateAction<File[]>>;
+  externalPreview?: string;
 }
 
-const DropzoneFrontpage: React.FC<IDropzoneFrontpage> = ({ setFiles }) => {
+const DropzoneFrontpage: React.FC<IDropzoneFrontpage> = ({
+  setFiles,
+  externalPreview,
+}) => {
   const [preview, setPreview] = useState<string | null>(null);
   const [imageLoaded, setImageLoaded] = useState<boolean>(false);
 
@@ -43,9 +47,16 @@ const DropzoneFrontpage: React.FC<IDropzoneFrontpage> = ({ setFiles }) => {
     multiple: false,
   });
 
+  useEffect(() => {
+    if (externalPreview) {
+      setPreview(externalPreview);
+      setImageLoaded(true);
+    }
+  }, [externalPreview]);
+
   return (
     <div className='flex flex-col items-center justify-center'>
-      {!imageLoaded && (
+      {!imageLoaded && !preview && (
         <div
           {...getRootProps()}
           className='border-dashed border-2 border-gray-300 p-6 w-64 h-64 flex flex-col items-center justify-center cursor-pointer relative'

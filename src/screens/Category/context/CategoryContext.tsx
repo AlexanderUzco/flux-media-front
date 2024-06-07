@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 export interface ICategoryModal {
   open: boolean;
   type: 'create' | 'edit' | 'delete' | null;
+  categorySelected?: TCategory;
 }
 
 export interface ICategoryContext {
@@ -23,6 +24,7 @@ const initialCategoryContext: ICategoryContext = {
   categoryModal: {
     open: false,
     type: 'create',
+    categorySelected: undefined,
   },
   handleCategoryModal: () => {},
   fetchCategories: () => {},

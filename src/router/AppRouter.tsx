@@ -6,6 +6,9 @@ import PrivateRoute from '../components/PrivateRoute';
 import Layout from '../components/Layout';
 import SignIn from '../screens/Signin';
 import Category from '../screens/Category';
+import Topic from '../screens/Topic';
+import ContentItem from '../screens/ContentItem';
+import ContentItemDetail from '../screens/ContentItemDetail';
 
 const AppRouter: React.FC = () => {
   return (
@@ -38,6 +41,18 @@ const AppRouter: React.FC = () => {
           <Route
             path='/category'
             element={<Category />}
+          />
+          <Route
+            path='/topic'
+            element={<Topic />}
+          />
+          <Route
+            path='/contentItem'
+            element={<ContentItem />}
+          />
+          <Route
+            path='/contentItem/:contentItemID' // Agrega la ruta con el parámetro itemID
+            element={<ContentItemDetail />}
           />
           <Route
             path='/dashboard'

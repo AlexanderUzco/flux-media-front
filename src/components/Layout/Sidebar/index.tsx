@@ -26,6 +26,19 @@ const Sidebar = () => {
         >
           Category
         </Link>
+
+        <Link
+          to='/topic'
+          className='block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700'
+        >
+          Topic
+        </Link>
+        <Link
+          to='/contentItem'
+          className='block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700'
+        >
+          Content Media
+        </Link>
       </nav>
     </div>
   );

@@ -1,9 +1,12 @@
 import { useContext } from 'react';
+import { TrashIcon, PencilIcon } from '@heroicons/react/16/solid';
 import { CategoryContext } from '../context/CategoryContext';
+
 const CategoriesTable: React.FC = () => {
-  const { categories } = useContext(CategoryContext);
+  const { categories, handleCategoryModal } = useContext(CategoryContext);
+
   return (
-    <table className='min-w-full divide-y divide-gray-200'>
+    <table className='min-w-full divide-y divide-gray-200 mt-24'>
       <thead className='bg-gray-50'>
         <tr>
           <th
@@ -40,7 +43,7 @@ const CategoriesTable: React.FC = () => {
       </thead>
       <tbody className='bg-white divide-y divide-gray-200'>
         {categories.map((category) => (
-          <tr key={category.id}>
+          <tr key={category._id}>
             <td className='px-6 py-4 whitespace-nowrap'>
               <div className='flex items-center'>
                 <div className='ml-4'>
@@ -61,10 +64,29 @@ const CategoriesTable: React.FC = () => {
               {category.description}
             </td>
             <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-500'>
-              {category.createdBy}
+              {category.createdBy.username}
             </td>
-            <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-500'>
-              {/* Aquí puedes colocar los componentes o botones de acciones */}
+            <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-500 flex justify-center aling-center'>
+              <PencilIcon
+                className='h-5 w-5 text-blue-500 cursor-pointer mr-2'
+                onClick={() =>
+                  handleCategoryModal({
+                    type: 'edit',
+                    open: true,
+                    categorySelected: category,
+                  })
+                }
+              />
+              <TrashIcon
+                className='h-5 w-5 text-red-500 cursor-pointer'
+                onClick={() =>
+                  handleCategoryModal({
+                    type: 'edit',
+                    open: true,
+                    categorySelected: category,
+                  })
+                }
+              />
             </td>
           </tr>
         ))}

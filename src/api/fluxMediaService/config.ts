@@ -24,20 +24,18 @@ API.interceptors.request.use((req) => {
     req.headers.Authorization = `Bearer ${token}`;
   }
 
-  console.log('headers:', req.headers);
-
   return req;
 });
 
 API.interceptors.response.use(
   (res) => {
     // TODO: Delete this code only for development
-    console.log('service: Flux Media');
-    console.group(res.config.url);
-    console.log('method:', res.config.method);
-    console.log('body:', res.config.data && JSON.parse(res.config.data));
-    console.log('response:', res.data);
-    console.groupEnd();
+    // console.log('service: Flux Media');
+    // console.group(res.config.url);
+    // console.log('method:', res.config.method);
+    // console.log('body:', res.config.data && JSON.parse(res.config.data));
+    // console.log('response:', res.data);
+    // console.groupEnd();
     return res;
   },
   (err: AxiosError<Error>) => err

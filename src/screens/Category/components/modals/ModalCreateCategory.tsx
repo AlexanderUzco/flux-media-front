@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import ModalBase from '../../../../components/ModalBase';
 import { v4 as uuidv4 } from 'uuid';
@@ -6,7 +6,10 @@ import { CategoryContext } from '../../context/CategoryContext';
 import DropzoneFrontpage from '../../../../components/DropzoneFrontpage';
 import { uploadFile } from '../../../../firebase/storage';
 import { AuthContext } from '../../../../contexts/authContext';
-import { createCategory } from '../../../../api/fluxMediaService/services/category';
+import {
+  createCategory,
+  updateCategory,
+} from '../../../../api/fluxMediaService/services/category';
 import { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
 
@@ -25,13 +28,27 @@ const ModalCreateCategory = () => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<FormValues>();
+
+  useEffect(() => {
+    if (categoryModal.categorySelected) {
+      setValue('name', categoryModal.categorySelected.name);
+      setValue('description', categoryModal.categorySelected.description);
+    }
+
+    return () => {
+      setValue('name', '');
+      setValue('description', '');
+    };
+  }, [categoryModal.categorySelected, setValue]);
 
   const closeModal = () => {
     handleCategoryModal({
       type: null,
       open: false,
+      categorySelected: undefined,
     });
   };
 
@@ -40,8 +57,8 @@ const ModalCreateCategory = () => {
       setLoading(true);
 
       let imageData = {
-        imageUrl: '',
-        ref: '',
+        imageUrl: categoryModal.categorySelected?.imageUrl || '',
+        ref: categoryModal.categorySelected?.ref || '',
       };
 
       if (files.length > 0) {
@@ -65,38 +82,75 @@ const ModalCreateCategory = () => {
           };
         }
       }
-      const res = await createCategory({
+
+      if (!data.name || !data.description) {
+        throw new Error('Name and description are required');
+      }
+
+      if (!imageData.imageUrl || !imageData.ref) {
+        throw new Error('Image is required');
+      }
+
+      const categoryData = {
         ...data,
         ...imageData,
         createdBy: user?.id as string,
-      });
+      };
 
-      fetchCategories();
-
-      if (res instanceof AxiosError) {
-        throw new Error(
-          res.response?.data.message || 'Error in create category'
+      if (categoryModal.categorySelected) {
+        const res = await updateCategory(
+          categoryModal.categorySelected._id,
+          categoryData
         );
+
+        if (res instanceof AxiosError) {
+          throw new Error(
+            res.response?.data.message || 'Error in Edit category'
+          );
+        }
+
+        toast.success('Category Edited successfully');
+      } else {
+        const res = await createCategory(categoryData);
+
+        if (res instanceof AxiosError) {
+          throw new Error(
+            res.response?.data.message || 'Error in create category'
+          );
+        }
+
+        toast.success('Category created successfully');
       }
 
-      toast.success('Category created successfully');
+      fetchCategories();
 
       setLoading(false);
 
       closeModal();
     } catch (error) {
       console.log('Error in create category:', error);
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
       setLoading(false);
     }
   };
 
   return (
     <>
-      {categoryModal.open && categoryModal.type === 'create' ? (
+      {(categoryModal.open && categoryModal.type === 'create') ||
+      categoryModal.type === 'edit' ? (
         <ModalBase
-          open={categoryModal.open}
+          open={
+            (categoryModal.open && categoryModal.type === 'create') ||
+            categoryModal.type === 'edit'
+          }
           closeModal={closeModal}
-          title='Create Category'
+          title={
+            categoryModal.type === 'create'
+              ? 'Create Category'
+              : 'Edit Category'
+          }
           successAction={handleSubmit(onSubmit)}
           successText='Create'
           loading={loading}
@@ -152,7 +206,13 @@ const ModalCreateCategory = () => {
               >
                 Image
               </label>
-              <DropzoneFrontpage setFiles={setFiles} />
+              <DropzoneFrontpage
+                setFiles={setFiles}
+                externalPreview={
+                  categoryModal.categorySelected &&
+                  categoryModal.categorySelected.imageUrl
+                }
+              />
             </div>
             {/*footer*/}
           </form>

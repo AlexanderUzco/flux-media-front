@@ -1,13 +1,18 @@
-import { useContext } from 'react';
-import { AuthContext } from '../../contexts/authContext';
+import { DashboardProvider } from './context/DashboardContext';
+import ContentItemsCards from './components/ContentItemsCards';
 
 const Dashboard = () => {
-  const { user } = useContext(AuthContext);
-
   return (
-    <div>
-      <h1>Dashboard {user?.username && `, welcome ${user.username}`}</h1>
-    </div>
+    <DashboardProvider>
+      <div className='relative overflow-hidden'>
+        <div className='fixed top-20 z-10 bg-white shadow-md py-4 px-6 w-full'>
+          <div className='flex items-center justify-between w-full'>
+            <h2 className='text-2xl font-bold'>Dashboard</h2>
+          </div>
+        </div>
+      </div>
+      <ContentItemsCards />
+    </DashboardProvider>
   );
 };
 

@@ -29,7 +29,7 @@ const SignIn = () => {
   }, [isAuthenticated, navigate]);
 
   return (
-    <div className='flex justify-center items-center h-screen bg-gray-300'>
+    <div className='flex justify-center items-center'>
       <div className='w-full max-w-md p-8 rounded bg-white'>
         <h1 className='text-3xl font-bold mb-4 text-center'>Sign In</h1>
         <form onSubmit={handleSubmit(onSubmit)}>

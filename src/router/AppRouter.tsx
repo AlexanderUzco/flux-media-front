@@ -13,18 +13,23 @@ import ContentItemDetail from '../screens/ContentItemDetail';
 const AppRouter: React.FC = () => {
   return (
     <Routes>
-      {/* Public routes */}
-      <Route
-        path='/signup'
-        element={<Signup />}
-      />
-      <Route
-        path='/signin'
-        element={<SignIn />}
-      />
-
-      {/* Private route using PrivateRoute component */}
       <Route element={<Layout />}>
+        {/* Public routes */}
+        <Route
+          path='/signup'
+          element={<Signup />}
+        />
+        <Route
+          path='/signin'
+          element={<SignIn />}
+        />
+        <Route
+          path='/dashboard'
+          element={<Dashboard />}
+        />
+
+        {/* Private route using PrivateRoute component */}
+
         <Route
           path='/'
           element={
@@ -53,10 +58,6 @@ const AppRouter: React.FC = () => {
           <Route
             path='/contentItem/:contentItemID' // Agrega la ruta con el parámetro itemID
             element={<ContentItemDetail />}
-          />
-          <Route
-            path='/dashboard'
-            element={<Dashboard />}
           />
         </Route>
       </Route>

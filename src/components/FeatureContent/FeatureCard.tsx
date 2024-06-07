@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom'; // Importa el componente Link de React Router
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/16/solid';
+import { AuthContext } from '../../contexts/authContext';
 
 interface FeatureCardProps {
   title: string;
@@ -20,9 +21,11 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
   principalImage,
   contentItemID,
 }) => {
+  const { isAuthenticated } = useContext(AuthContext);
+
   return (
     <Link
-      to={`/contentItem/${contentItemID}`}
+      to={isAuthenticated ? `/contentItem/${contentItemID}` : '/signup'}
       className='p-4 w-80 h-96'
     >
       {' '}

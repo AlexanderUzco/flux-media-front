@@ -1,30 +1,27 @@
 # React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Configuración del Cliente Frontend
 
-Currently, two official plugins are available:
+Este proyecto utiliza variables de entorno para la configuración del cliente frontend. Antes de ejecutar la aplicación, asegúrate de configurar las siguientes variables de entorno en un archivo `.env` en la raíz del proyecto.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Variables de Entorno
 
-## Expanding the ESLint configuration
+- `VITE_FLUX_MEDIA_SERVICE_URL`: URL del servicio de medios de Flux. (Ejemplo: `https://flux-media-service.example.com`)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- Variables de Configuración de Firebase:
 
-- Configure the top-level `parserOptions` property like this:
+  - `VITE_FIREBASE_API_KEY`: Clave API de Firebase.
+  - `VITE_FIREBASE_AUTH_DOMAIN`: Dominio de autenticación de Firebase.
+  - `VITE_FIREBASE_PROJECT_ID`: ID del proyecto de Firebase.
+  - `VITE_FIREBASE_STORAGE_BUCKET`: Bucket de almacenamiento de Firebase.
+  - `VITE_FIREBASE_MESSAGING_SENDER`: Identificador de remitente de Firebase.
+  - `VITE_FIREBASE_APP_ID`: ID de la aplicación de Firebase.
+  - `VITE_FIREBASE_MEASUREMENT_ID`: ID de medición de Firebase.
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+## Configuración de Firebase
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Para utilizar las funciones de Firebase en el cliente frontend, necesitarás configurar un proyecto en Firebase y obtener las credenciales correspondientes. Puedes encontrar más información sobre cómo configurar Firebase en la [documentación oficial de Firebase](https://firebase.google.com/docs/web/setup).
+
+Asegúrate de que las variables de entorno de Firebase coincidan con la configuración de tu proyecto en Firebase para garantizar el correcto funcionamiento de la integración con Firebase en el cliente frontend.
+
+¡Listo! Con estas variables de entorno configuradas, estás preparado para ejecutar y trabajar con el cliente frontend de tu aplicación.

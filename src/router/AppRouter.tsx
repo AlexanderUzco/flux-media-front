@@ -1,10 +1,10 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import Signup from '../screens/Signup';
+import SignIn from '../screens/SignIn';
 import Dashboard from '../screens/Dashboard';
 import PrivateRoute from '../components/PrivateRoute';
 import Layout from '../components/Layout';
-import SignIn from '../screens/Signin';
+import SignUp from '../screens/SignUpp';
 import Category from '../screens/Category';
 import Topic from '../screens/Topic';
 import ContentItem from '../screens/ContentItem';
@@ -17,7 +17,7 @@ const AppRouter: React.FC = () => {
         {/* Public routes */}
         <Route
           path='/signup'
-          element={<Signup />}
+          element={<SignUp />}
         />
         <Route
           path='/signin'

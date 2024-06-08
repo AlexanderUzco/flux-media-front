@@ -1,16 +1,18 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useContext, useEffect } from 'react';
 import { AuthContext } from '../../contexts/authContext';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 type Inputs = {
+  username: string;
   email: string;
   password: string;
+  role: string;
 };
 
-const Signup = () => {
+const SignUp = () => {
   const navigate = useNavigate();
-  const { signupContext, isPending, isAuthenticated } = useContext(AuthContext);
+  const { signinContext, isPending, isAuthenticated } = useContext(AuthContext);
 
   const {
     register,
@@ -18,7 +20,7 @@ const Signup = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => signupContext(data);
+  const onSubmit: SubmitHandler<Inputs> = async (data) => signinContext(data);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -29,8 +31,25 @@ const Signup = () => {
   return (
     <div className='flex justify-center items-center'>
       <div className='w-full max-w-md p-8 rounded bg-white'>
-        <h1 className='text-3xl font-bold mb-4 text-center'>Signup</h1>
+        <h1 className='text-3xl font-bold mb-4 text-center'>Sign In</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
+          <div className='mb-4'>
+            <label
+              htmlFor='username'
+              className='block text-gray-700 text-sm font-bold mb-2'
+            >
+              Username
+            </label>
+            <input
+              type='text'
+              id='username'
+              {...register('username', { required: true })}
+              className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+            />
+            {errors.username && (
+              <span className='text-red-500'>This field is required</span>
+            )}
+          </div>
           <div className='mb-4'>
             <label
               htmlFor='email'
@@ -48,7 +67,7 @@ const Signup = () => {
               <span className='text-red-500'>This field is required</span>
             )}
           </div>
-          <div className='mb-6'>
+          <div className='mb-4'>
             <label
               htmlFor='password'
               className='block text-gray-700 text-sm font-bold mb-2'
@@ -65,6 +84,26 @@ const Signup = () => {
               <span className='text-red-500'>This field is required</span>
             )}
           </div>
+          {/* Nuevo select para el tipo de registro */}
+          <div className='mb-6'>
+            <label
+              htmlFor='role' // Cambiado a "role"
+              className='block text-gray-700 text-sm font-bold mb-2'
+            >
+              User Type
+            </label>
+            <select
+              id='role' // Cambiado a "role"
+              {...register('role', { required: true })}
+              className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+            >
+              <option value='WRITER'>Writer</option>{' '}
+              <option value='READER'>Reader</option>{' '}
+            </select>
+            {errors.role && (
+              <span className='text-red-500'>This field is required</span>
+            )}
+          </div>
           <div className='flex items-center justify-center'>
             <button
               type='submit'
@@ -73,7 +112,7 @@ const Signup = () => {
               }`}
               disabled={isPending}
             >
-              Sign Up
+              Sign In
             </button>
           </div>
           <p className='mt-4 text-sm text-center'>
@@ -82,7 +121,7 @@ const Signup = () => {
               to='/signin'
               className='text-blue-500'
             >
-              Sign In
+              Sign Up
             </Link>
           </p>
         </form>
@@ -91,4 +130,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default SignUp;

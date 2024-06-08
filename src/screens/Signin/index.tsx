@@ -1,18 +1,16 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useContext, useEffect } from 'react';
 import { AuthContext } from '../../contexts/authContext';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 type Inputs = {
-  username: string;
   email: string;
   password: string;
-  role: string;
 };
 
 const SignIn = () => {
   const navigate = useNavigate();
-  const { signinContext, isPending, isAuthenticated } = useContext(AuthContext);
+  const { signupContext, isPending, isAuthenticated } = useContext(AuthContext);
 
   const {
     register,
@@ -20,7 +18,7 @@ const SignIn = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => signinContext(data);
+  const onSubmit: SubmitHandler<Inputs> = async (data) => signupContext(data);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -31,25 +29,8 @@ const SignIn = () => {
   return (
     <div className='flex justify-center items-center'>
       <div className='w-full max-w-md p-8 rounded bg-white'>
-        <h1 className='text-3xl font-bold mb-4 text-center'>Sign In</h1>
+        <h1 className='text-3xl font-bold mb-4 text-center'>Signup</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className='mb-4'>
-            <label
-              htmlFor='username'
-              className='block text-gray-700 text-sm font-bold mb-2'
-            >
-              Username
-            </label>
-            <input
-              type='text'
-              id='username'
-              {...register('username', { required: true })}
-              className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
-            />
-            {errors.username && (
-              <span className='text-red-500'>This field is required</span>
-            )}
-          </div>
           <div className='mb-4'>
             <label
               htmlFor='email'
@@ -67,7 +48,7 @@ const SignIn = () => {
               <span className='text-red-500'>This field is required</span>
             )}
           </div>
-          <div className='mb-4'>
+          <div className='mb-6'>
             <label
               htmlFor='password'
               className='block text-gray-700 text-sm font-bold mb-2'
@@ -84,26 +65,6 @@ const SignIn = () => {
               <span className='text-red-500'>This field is required</span>
             )}
           </div>
-          {/* Nuevo select para el tipo de registro */}
-          <div className='mb-6'>
-            <label
-              htmlFor='role' // Cambiado a "role"
-              className='block text-gray-700 text-sm font-bold mb-2'
-            >
-              User Type
-            </label>
-            <select
-              id='role' // Cambiado a "role"
-              {...register('role', { required: true })}
-              className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
-            >
-              <option value='WRITER'>Writer</option>{' '}
-              <option value='READER'>Reader</option>{' '}
-            </select>
-            {errors.role && (
-              <span className='text-red-500'>This field is required</span>
-            )}
-          </div>
           <div className='flex items-center justify-center'>
             <button
               type='submit'
@@ -112,16 +73,16 @@ const SignIn = () => {
               }`}
               disabled={isPending}
             >
-              Sign In
+              Sign Up
             </button>
           </div>
           <p className='mt-4 text-sm text-center'>
-            Don't have an account?{' '}
+            Already have an account?{' '}
             <Link
               to='/signup'
               className='text-blue-500'
             >
-              Sign Up
+              Sign In
             </Link>
           </p>
         </form>

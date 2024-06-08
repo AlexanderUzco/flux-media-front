@@ -68,7 +68,7 @@ const SignUp = () => {
   return (
     <div className='flex justify-center items-center h-full bg-gray-300'>
       <div className='w-full max-w-md p-8 rounded bg-white rounded'>
-        <h1 className='text-3xl font-bold mb-4 text-center'>Sign In</h1>
+        <h1 className='text-3xl font-bold mb-4 text-center'>Sign Up</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className='mb-4'>
             <label
@@ -152,7 +152,7 @@ const SignUp = () => {
               }`}
               disabled={isPending}
             >
-              Sign In
+              Sign Up
             </button>
           </div>
           <p className='mt-4 text-sm text-center'>

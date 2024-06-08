@@ -77,12 +77,12 @@ const SignIn = () => {
             </button>
           </div>
           <p className='mt-4 text-sm text-center'>
-            Already have an account?{' '}
+            Don't have an account?{' '}
             <Link
               to='/signup'
               className='text-blue-500'
             >
-              Sign In
+              Sign Up
             </Link>
           </p>
         </form>

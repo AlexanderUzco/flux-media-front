@@ -155,13 +155,14 @@ const SignUp = () => {
               Sign Up
             </button>
           </div>
+
           <p className='mt-4 text-sm text-center'>
-            Don't have an account?{' '}
+            Already have an account?{' '}
             <Link
               to='/signin'
               className='text-blue-500'
             >
-              Sign Up
+              Sign In
             </Link>
           </p>
         </form>

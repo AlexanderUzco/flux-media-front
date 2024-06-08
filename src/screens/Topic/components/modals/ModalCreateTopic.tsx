@@ -124,7 +124,7 @@ const ModalCreateTopic = () => {
           closeModal={closeModal}
           title={topicModal.type === 'create' ? 'Create Topic' : 'Edit Topic'}
           successAction={handleSubmit(onSubmit)}
-          successText='Create'
+          successText={topicModal.type === 'create' ? 'Create' : 'Edit'}
           loading={loading}
         >
           <form className='relative p-6 flex-auto'>

@@ -8,7 +8,7 @@ interface FeatureContentProps {
 
 const FeatureContent: React.FC<FeatureContentProps> = ({ features }) => {
   return (
-    <div className='flex justify-center mt-20 min-w-full divide-y divide-gray-200 '>
+    <div className='flex justify-center mt-24 min-w-full divide-y divide-gray-200 '>
       <div className='flex flex-wrap justify-center max-w-7xl w-full'>
         {features.map((feature, index) => (
           <FeatureCard

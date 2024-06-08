@@ -4,7 +4,7 @@ import SignIn from '../screens/SignIn';
 import Dashboard from '../screens/Dashboard';
 import PrivateRoute from '../components/PrivateRoute';
 import Layout from '../components/Layout';
-import SignUp from '../screens/SignUpp';
+import SignUp from '../screens/SignUp';
 import Category from '../screens/Category';
 import Topic from '../screens/Topic';
 import ContentItem from '../screens/ContentItem';

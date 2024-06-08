@@ -1,8 +1,10 @@
 import { useContext } from 'react';
 import { ContentItemDetailContext } from '../../context/ContentItemDetailContext';
 import { TrashIcon } from '@heroicons/react/16/solid';
+import { AuthContext } from '../../../../contexts/authContext';
 
 const ItemDetailProperty = () => {
+  const { isAuthenticated, user } = useContext(AuthContext);
   const { contentItem, handleItemDetailModal } = useContext(
     ContentItemDetailContext
   );
@@ -21,16 +23,18 @@ const ItemDetailProperty = () => {
         <span className='text-sm font-medium'>
           {contentItem?.topicID?.name || 'No Topic'}
         </span>
-        <TrashIcon
-          className='h-5 w-5 text-red-500 cursor-pointer ml-auto'
-          onClick={() =>
-            handleItemDetailModal({
-              type: 'delete',
-              open: true,
-              contentItemID: contentItem?._id,
-            })
-          }
-        />
+        {isAuthenticated && user?.role === 'ADMIN' && (
+          <TrashIcon
+            className='h-5 w-5 text-red-500 cursor-pointer ml-auto'
+            onClick={() =>
+              handleItemDetailModal({
+                type: 'delete',
+                open: true,
+                contentItemID: contentItem?._id,
+              })
+            }
+          />
+        )}
       </div>
     </div>
   );

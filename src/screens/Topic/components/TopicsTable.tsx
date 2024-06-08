@@ -98,27 +98,29 @@ const TopicsTable: React.FC = () => {
                 {topic.createdBy.username}
               </div>
             </td>
-            <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-500 flex justify-center aling-center'>
-              <PencilIcon
-                className='h-5 w-5 text-blue-500 cursor-pointer mr-2'
-                onClick={() =>
-                  handleTopicModal({
-                    type: 'edit',
-                    open: true,
-                    topicSelected: topic,
-                  })
-                }
-              />
-              <TrashIcon
-                className='h-5 w-5 text-red-500 cursor-pointer'
-                onClick={() =>
-                  handleTopicModal({
-                    type: 'delete',
-                    open: true,
-                    topicSelected: topic,
-                  })
-                }
-              />
+            <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-500'>
+              <div className='flex justify-center aling-center'>
+                <PencilIcon
+                  className='h-5 w-5 text-blue-500 cursor-pointer mr-2'
+                  onClick={() =>
+                    handleTopicModal({
+                      type: 'edit',
+                      open: true,
+                      topicSelected: topic,
+                    })
+                  }
+                />
+                <TrashIcon
+                  className='h-5 w-5 text-red-500 cursor-pointer'
+                  onClick={() =>
+                    handleTopicModal({
+                      type: 'delete',
+                      open: true,
+                      topicSelected: topic,
+                    })
+                  }
+                />
+              </div>
             </td>
           </tr>
         ))}

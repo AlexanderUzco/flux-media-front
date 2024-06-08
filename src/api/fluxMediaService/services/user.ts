@@ -1,6 +1,6 @@
 import { removeCookie } from 'typescript-cookie';
 import { API } from '../config';
-import { TSigninData, TSignupData } from './types';
+import { TSigninData, TSignupData, TVerifyUsername } from './types';
 
 const signin = async (body: TSigninData) => API.post(`users/signin`, body);
 
@@ -13,4 +13,7 @@ const signout = async () => {
 
 const authenticateUser = async () => API.get(`users/authenticate`);
 
-export { signin, signup, signout, authenticateUser };
+const verifyUsername = async (body: TVerifyUsername) =>
+  API.post('users/verify-username', body);
+
+export { signin, signup, signout, authenticateUser, verifyUsername };

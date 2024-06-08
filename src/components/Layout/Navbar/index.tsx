@@ -21,13 +21,6 @@ const Navbar = () => {
   return (
     <div className='w-full bg-gray-900 text-white p-4 flex justify-between items-center'>
       <div className='flex'>
-        {!isAuthenticated && (
-          <img
-            src={logo}
-            alt='Logo'
-            className='w-12 md:mx-auto md:hidden'
-          />
-        )}
         <h1
           className='text-xl font-bold hidden md:block cursor-pointer'
           onClick={handleDasoboard}
@@ -94,17 +87,16 @@ const Navbar = () => {
               </>
             )}
 
-            {(isAuthenticated && user?.role === 'ADMIN') ||
-              (user?.role === 'WRITER' && (
-                <MenuItem>
-                  <Link
-                    to='/contentItem'
-                    className='block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-100 w-full text-left'
-                  >
-                    Content Media
-                  </Link>
-                </MenuItem>
-              ))}
+            {(user?.role === 'ADMIN' || user?.role === 'WRITER') && (
+              <MenuItem>
+                <Link
+                  to='/contentItem'
+                  className='block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-100 w-full text-left'
+                >
+                  Content Media
+                </Link>
+              </MenuItem>
+            )}
 
             {/* Create signout button */}
             <MenuItem>

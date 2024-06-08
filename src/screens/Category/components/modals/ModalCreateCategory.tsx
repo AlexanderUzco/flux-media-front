@@ -152,7 +152,7 @@ const ModalCreateCategory = () => {
               : 'Edit Category'
           }
           successAction={handleSubmit(onSubmit)}
-          successText='Create'
+          successText={categoryModal.type === 'create' ? 'Create' : 'Edit'}
           loading={loading}
         >
           {/*body*/}

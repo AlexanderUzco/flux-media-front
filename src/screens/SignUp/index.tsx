@@ -1,7 +1,10 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../contexts/authContext';
 import { useNavigate, Link } from 'react-router-dom';
+import { useDebounce } from '../../hooks/useDebounce';
+import { verifyUsername } from '../../api/fluxMediaService/services/user';
+import { AxiosError } from 'axios';
 
 type Inputs = {
   username: string;
@@ -11,16 +14,24 @@ type Inputs = {
 };
 
 const SignUp = () => {
-  const navigate = useNavigate();
-  const { signinContext, isPending, isAuthenticated } = useContext(AuthContext);
+  const { signupContext, isPending, isAuthenticated } = useContext(AuthContext);
+
+  const [errorExistUsername, setErrorExistUsername] = useState(false);
 
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => signinContext(data);
+  const navigate = useNavigate();
+
+  const usernameValue = watch('username');
+
+  const debouncedUsername = useDebounce(usernameValue, 500);
+
+  const onSubmit: SubmitHandler<Inputs> = async (data) => signupContext(data);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -28,9 +39,35 @@ const SignUp = () => {
     }
   }, [isAuthenticated, navigate]);
 
+  useEffect(() => {
+    const checkUsernameAvailability = async () => {
+      try {
+        const res = await verifyUsername({ username: debouncedUsername });
+
+        if (res instanceof AxiosError) {
+          throw new Error(
+            res.response?.data.message || 'Error in Verify Username'
+          );
+        }
+
+        const { exists } = res.data;
+
+        setErrorExistUsername(exists);
+      } catch (error) {
+        if (error instanceof Error) {
+          alert(error.message);
+        }
+      }
+    };
+
+    if (debouncedUsername) {
+      checkUsernameAvailability();
+    }
+  }, [debouncedUsername]);
+
   return (
-    <div className='flex justify-center items-center'>
-      <div className='w-full max-w-md p-8 rounded bg-white'>
+    <div className='flex justify-center items-center h-full bg-gray-300'>
+      <div className='w-full max-w-md p-8 rounded bg-white rounded'>
         <h1 className='text-3xl font-bold mb-4 text-center'>Sign In</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className='mb-4'>
@@ -48,6 +85,9 @@ const SignUp = () => {
             />
             {errors.username && (
               <span className='text-red-500'>This field is required</span>
+            )}
+            {errorExistUsername && (
+              <span className='text-red-500'>Username already taken</span>
             )}
           </div>
           <div className='mb-4'>

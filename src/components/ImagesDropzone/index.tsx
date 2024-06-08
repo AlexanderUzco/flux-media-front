@@ -66,15 +66,15 @@ const ImageDropzone: React.FC<ImageDropzoneProps> = ({ images, setImages }) => {
               alt={`preview ${index}`}
               className='w-full h-32 object-cover rounded shadow'
             />
-            <button
+            <div
               onClick={() => removeImage(index)}
-              className='absolute top-2 right-2 bg-white text-red-500 rounded-full p-1 focus:outline-none'
+              className='absolute top-2 right-2 bg-white text-red-500 rounded-full p-1 focus:outline-none cursor-pointer'
             >
               <XCircleIcon
                 className='h-5 w-5'
                 aria-hidden='true'
               />
-            </button>
+            </div>
           </div>
         ))}
       </div>

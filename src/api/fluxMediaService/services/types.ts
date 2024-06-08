@@ -1,12 +1,16 @@
-export type TSigninData = {
+export type TSignupData = {
   username: string;
   email: string;
   password: string;
 };
 
-export type TSignupData = {
+export type TSigninData = {
   email: string;
   password: string;
+};
+
+export type TVerifyUsername = {
+  username: string;
 };
 
 export type TCreateCategory = {

@@ -41,15 +41,14 @@ const Sidebar = () => {
             </Link>
           </>
         )}
-        {(isAuthenticated && user?.role === 'ADMIN') ||
-          (user?.role === 'WRITER' && (
-            <Link
-              to='/contentItem'
-              className='block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700'
-            >
-              Content Media
-            </Link>
-          ))}
+        {(user?.role === 'ADMIN' || user?.role === 'WRITER') && (
+          <Link
+            to='/contentItem'
+            className='block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700'
+          >
+            Content Media
+          </Link>
+        )}
       </nav>
     </div>
   );

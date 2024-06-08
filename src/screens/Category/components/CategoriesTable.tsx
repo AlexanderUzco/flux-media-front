@@ -66,27 +66,29 @@ const CategoriesTable: React.FC = () => {
             <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-500'>
               {category.createdBy.username}
             </td>
-            <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-500 flex justify-center aling-center'>
-              <PencilIcon
-                className='h-5 w-5 text-blue-500 cursor-pointer mr-2'
-                onClick={() =>
-                  handleCategoryModal({
-                    type: 'edit',
-                    open: true,
-                    categorySelected: category,
-                  })
-                }
-              />
-              <TrashIcon
-                className='h-5 w-5 text-red-500 cursor-pointer'
-                onClick={() =>
-                  handleCategoryModal({
-                    type: 'edit',
-                    open: true,
-                    categorySelected: category,
-                  })
-                }
-              />
+            <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-500'>
+              <div className='flex justify-center aling-center'>
+                <PencilIcon
+                  className='h-5 w-5 text-blue-500 cursor-pointer mr-2'
+                  onClick={() =>
+                    handleCategoryModal({
+                      type: 'edit',
+                      open: true,
+                      categorySelected: category,
+                    })
+                  }
+                />
+                <TrashIcon
+                  className='h-5 w-5 text-red-500 cursor-pointer'
+                  onClick={() =>
+                    handleCategoryModal({
+                      type: 'edit',
+                      open: true,
+                      categorySelected: category,
+                    })
+                  }
+                />
+              </div>
             </td>
           </tr>
         ))}

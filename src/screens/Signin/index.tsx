@@ -10,7 +10,7 @@ type Inputs = {
 
 const SignIn = () => {
   const navigate = useNavigate();
-  const { signupContext, isPending, isAuthenticated } = useContext(AuthContext);
+  const { signinContext, isPending, isAuthenticated } = useContext(AuthContext);
 
   const {
     register,
@@ -18,7 +18,7 @@ const SignIn = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => signupContext(data);
+  const onSubmit: SubmitHandler<Inputs> = async (data) => signinContext(data);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -27,8 +27,8 @@ const SignIn = () => {
   }, [isAuthenticated, navigate]);
 
   return (
-    <div className='flex justify-center items-center'>
-      <div className='w-full max-w-md p-8 rounded bg-white'>
+    <div className='flex justify-center items-center h-full bg-gray-300'>
+      <div className='w-full max-w-md p-8 rounded bg-white rounded'>
         <h1 className='text-3xl font-bold mb-4 text-center'>Signup</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className='mb-4'>

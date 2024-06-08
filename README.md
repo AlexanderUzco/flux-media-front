@@ -1,12 +1,26 @@
-# React + TypeScript + Vite
+# Flux Media (React + TypeScript + Vite)
+
+## 🚀 Ver el proyecto en [Live](https://flux-media-front.vercel.app/)
+
+Este proyecto ha sido desplegado utilizando [Vercel](https://vercel.com/).
+
+Para más información sobre cómo desplegar aplicaciones en Vercel, consulta su [documentación oficial](https://vercel.com/docs).
+
+# Servicio API
+
+El proyecto esta conectado a la api [Flux Media](flux-media-api-production.up.railway.app) desplegado con [Railway](https://railway.app/)
+
+Repositorio: [ds-flux-media-service](https://github.com/AlexanderUzco/ds-flux-media-service)
+
+Postman Collection: [flux-media-collection](https://www.postman.com/red-equinox-473577/workspace/flux-media-service/collection/25671998-0c950769-a35f-46aa-a82c-61ede40c1b36)
 
 # Configuración del Cliente Frontend
 
-Este proyecto utiliza variables de entorno para la configuración del cliente frontend. Antes de ejecutar la aplicación, asegúrate de configurar las siguientes variables de entorno en un archivo `.env` en la raíz del proyecto.
+Este proyecto utiliza variables de entorno para la configuración del cliente frontend. Antes de ejecutar la aplicación, **asegúrate de configurar las siguientes variables de entorno en un archivo `.env` en la raíz del proyecto**.
 
 ## Variables de Entorno
 
-- `VITE_FLUX_MEDIA_SERVICE_URL`: URL del servicio de medios de Flux. (Ejemplo: `https://flux-media-service.example.com`)
+- `VITE_FLUX_MEDIA_SERVICE_URL`: URL del servicio Flux Media.
 
 - Variables de Configuración de Firebase:
 

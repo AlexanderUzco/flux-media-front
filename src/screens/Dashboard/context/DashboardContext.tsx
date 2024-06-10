@@ -70,7 +70,6 @@ export const DashboardProvider: FC<{ children: ReactNode }> = ({
         throw { message: res?.response?.data };
       }
 
-      console.log(res.data.totalItemsSummary);
       setContentItemSummary(res.data.totalItemsSummary as TContentItemSummary);
 
       setLoadingContentItemSummary(false);

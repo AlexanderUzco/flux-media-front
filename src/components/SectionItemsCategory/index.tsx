@@ -18,8 +18,11 @@ const SectionItemsCategory = ({
 
   return (
     <>
-      {groupByCategoryData.map((category) => (
-        <section className='mt-10'>
+      {groupByCategoryData.map((category, index) => (
+        <section
+          className='mt-10'
+          key={index}
+        >
           <div
             className='relative bg-cover bg-center h-40 md:h-64 w-[90%] mx-auto rounded-lg overflow-hidden shadow-lg'
             style={{ backgroundImage: `url(${category.imageUrl})` }}

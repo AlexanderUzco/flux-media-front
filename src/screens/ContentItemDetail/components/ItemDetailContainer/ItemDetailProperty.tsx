@@ -38,7 +38,7 @@ const ItemDetailProperty = () => {
           {contentItem?.topicID?.name || 'No Topic'}
         </span>
         {isAuthenticated &&
-          (user?.role === 'ADMIN' || contentItem.createdBy.id == user.id) && (
+          (user?.role === 'ADMIN' || contentItem?.createdBy._id == user.id) && (
             <TrashIcon
               className='h-5 w-5 text-red-500 cursor-pointer ml-auto'
               onClick={() =>

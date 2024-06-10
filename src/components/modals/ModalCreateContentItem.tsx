@@ -76,6 +76,10 @@ const ModalCreateContentItem: FC<IModalCreateContentItemProps> = ({
       setValue('category', topic?.category);
       setValue('topic', item.topicID._id);
 
+      if (item.content.type === 'video') {
+        setUrlVideos(item.content.data);
+      }
+
       handleDataItem(item);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

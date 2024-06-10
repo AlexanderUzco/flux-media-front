@@ -1,18 +1,34 @@
-import { useContext, useState } from 'react';
-import { ContentItemContext } from '@ContentItem/context/ContentItemContext';
+import { FC, useContext, useEffect, useState } from 'react';
 import { AuthContext } from '@contexts/authContext';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 import ModalBase from '@components/ModalBase';
 import AddYoutubeLinks from '@components/AddYoutubeLinks';
 import ImageDropzone, { ImagePreview } from '@components/ImagesDropzone';
-import { uploadFile } from '../../../../firebase/storage';
+import { uploadFile } from '../../firebase/storage';
 import { TCreateContentItem } from '@api/fluxMediaService/services/types';
 import { AxiosError } from 'axios';
-import { createContentItem } from '@api/fluxMediaService/services/contentItem';
+import {
+  createContentItem,
+  updateContentItem,
+} from '@api/fluxMediaService/services/contentItem';
 import { toast } from 'react-toastify';
-import { TImageData } from '@ContentItem/types';
+import { TImageData, TItem } from '@ContentItem/types';
 import useContentSelection from '@hooks/useContentSelection';
+import { TTopicByCategory } from '@screens/Topic/types';
+
+export interface IContentItemModal {
+  open: boolean;
+  type: 'create' | 'edit' | 'delete' | null;
+}
+
+interface IModalCreateContentItemProps {
+  handleOpen: IContentItemModal;
+  handleContentItemModal: (data: IContentItemModal) => void;
+  fetchData: () => void;
+  topicsByCategory: TTopicByCategory[];
+  item?: TItem;
+}
 
 type FormValues = {
   title: string;
@@ -21,13 +37,13 @@ type FormValues = {
   category: string;
 };
 
-const ModalCreateContentItem = () => {
-  const {
-    handleContentItemModal,
-    fetchContentItems,
-    contentItemModal,
-    topics,
-  } = useContext(ContentItemContext);
+const ModalCreateContentItem: FC<IModalCreateContentItemProps> = ({
+  handleOpen,
+  topicsByCategory,
+  item,
+  handleContentItemModal,
+  fetchData,
+}) => {
   const { user } = useContext(AuthContext);
   const [urlVideos, setUrlVideos] = useState<string[]>(['']);
   const [imagesItem, setImagesItem] = useState<ImagePreview[]>([]);
@@ -40,13 +56,30 @@ const ModalCreateContentItem = () => {
     handleCategoryChange,
     handleTopicChange,
     handleContentTypeChange,
-  } = useContentSelection(topics);
+    handleDataItem,
+  } = useContentSelection(topicsByCategory);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<FormValues>();
+
+  useEffect(() => {
+    if (item) {
+      const topic = topicsByCategory.find(
+        (data) => data.category === item.topicID.categoryID.name
+      );
+
+      setValue('title', item.title);
+      setValue('category', topic?.category);
+      setValue('topic', item.topicID._id);
+
+      handleDataItem(item);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [item]);
 
   const closeModal = () => {
     handleContentItemModal({
@@ -67,6 +100,10 @@ const ModalCreateContentItem = () => {
       if (selectedContentType == 'image') {
         await Promise.all(
           imagesItem.map(async (image) => {
+            if (image.isLoaded) {
+              imagesUploaded.push(image.isLoaded);
+              return;
+            }
             const imageItem = await uploadFile({
               imageRef: `user/${user?.id}/file/${uuidv4() + image.file.name}`,
               file: image.file,
@@ -108,25 +145,37 @@ const ModalCreateContentItem = () => {
         };
       }
 
-      if (imagesUploaded.length > 0) {
+      if (selectedContentType === 'image' && imagesUploaded.length > 0) {
         contentItemData.content = {
           type: 'image',
           data: imagesUploaded,
         };
       }
 
-      const resContentItem = await createContentItem(contentItemData);
+      if (item) {
+        const resUpdate = await updateContentItem(item._id, contentItemData);
 
-      if (resContentItem instanceof AxiosError) {
-        throw new Error(
-          resContentItem.response?.data.message ||
-            'Error in create Content Item'
-        );
+        if (resUpdate instanceof AxiosError) {
+          throw new Error(
+            resUpdate.response?.data.message || 'Error in update Content Item'
+          );
+        }
+      } else {
+        const resContentItem = await createContentItem(contentItemData);
+
+        if (resContentItem instanceof AxiosError) {
+          throw new Error(
+            resContentItem.response?.data.message ||
+              'Error in create Content Item'
+          );
+        }
       }
 
-      fetchContentItems();
+      fetchData && fetchData();
 
-      toast.success('Item Media created successfully');
+      toast.success(
+        `${item ? 'Content Item updated' : 'Content Item created'} successfully`
+      );
 
       setLoading(false);
 
@@ -141,13 +190,17 @@ const ModalCreateContentItem = () => {
 
   return (
     <>
-      {contentItemModal.open && contentItemModal.type === 'create' ? (
+      {handleOpen.open &&
+      (handleOpen.type === 'create' || handleOpen.type === 'edit') ? (
         <ModalBase
-          open={contentItemModal.open}
+          open={
+            (handleOpen.open && handleOpen.type === 'create') ||
+            handleOpen.type === 'edit'
+          }
           closeModal={closeModal}
-          title='Create Content Item'
+          title={handleOpen.type === 'create' ? 'Create Item' : 'Edit Item'}
           successAction={handleSubmit(onSubmit)}
-          successText='Create'
+          successText={handleOpen.type === 'create' ? 'Create' : 'Edit'}
           loading={loading}
         >
           {/*body*/}
@@ -188,7 +241,7 @@ const ModalCreateContentItem = () => {
                 onChange={handleCategoryChange}
                 className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
               >
-                {topics.map((category) => (
+                {topicsByCategory.map((category) => (
                   <option
                     key={category.category}
                     value={category.category}
@@ -215,7 +268,7 @@ const ModalCreateContentItem = () => {
                 <select
                   id='topic'
                   {...register('topic', {
-                    required: 'Category is required',
+                    required: 'Topic is required',
                   })}
                   onChange={handleTopicChange}
                   className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
@@ -302,6 +355,11 @@ const ModalCreateContentItem = () => {
                 <ImageDropzone
                   setImages={setImagesItem}
                   images={imagesItem}
+                  imagesLoaded={
+                    item && item.content.type === 'image'
+                      ? item.content.data
+                      : []
+                  }
                 />
               </div>
             )}

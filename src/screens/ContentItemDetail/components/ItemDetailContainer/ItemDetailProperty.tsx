@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { ArrowUturnLeftIcon } from '@heroicons/react/16/solid';
+import { ArrowUturnLeftIcon, PencilIcon } from '@heroicons/react/16/solid';
 import { ContentItemDetailContext } from '../../context/ContentItemDetailContext';
 import { TrashIcon } from '@heroicons/react/16/solid';
 import { AuthContext } from '../../../../contexts/authContext';
@@ -39,16 +39,28 @@ const ItemDetailProperty = () => {
         </span>
         {isAuthenticated &&
           (user?.role === 'ADMIN' || contentItem?.createdBy._id == user.id) && (
-            <TrashIcon
-              className='h-5 w-5 text-red-500 cursor-pointer ml-auto'
-              onClick={() =>
-                handleItemDetailModal({
-                  type: 'delete',
-                  open: true,
-                  contentItemID: contentItem?._id,
-                })
-              }
-            />
+            <div className='ml-auto flex'>
+              <TrashIcon
+                className='h-8 w-8 text-red-500 cursor-pointer'
+                onClick={() =>
+                  handleItemDetailModal({
+                    type: 'delete',
+                    open: true,
+                    contentItemID: contentItem?._id,
+                  })
+                }
+              />
+              <PencilIcon
+                className='h-8 w-8 text-blue-500 cursor-pointer mr-2'
+                onClick={() =>
+                  handleItemDetailModal({
+                    type: 'edit',
+                    open: true,
+                    contentItemID: contentItem?._id,
+                  })
+                }
+              />
+            </div>
           )}
       </div>
     </div>

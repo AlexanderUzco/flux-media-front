@@ -4,6 +4,9 @@ import { getContentItem } from '../../../api/fluxMediaService/services/contentIt
 import { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
 import { TItem } from '../../ContentItem/types';
+import { getTopics } from '@api/fluxMediaService/services/topic';
+import { TTopic, TTopicByCategory } from '@screens/Topic/types';
+import { groupByCategory } from '@screens/ContentItem/utils/topic';
 
 export interface IItemDetailModal {
   open: boolean;
@@ -16,6 +19,8 @@ export interface IContentItemDetailContext {
   loadingContentItem: boolean;
   itemDetailModal: IItemDetailModal;
   handleItemDetailModal: (data: IItemDetailModal) => void;
+  fetchContentItem: (id: string) => void;
+  topics: TTopicByCategory[];
 }
 
 const initialContentItemDetailContext: IContentItemDetailContext = {
@@ -27,6 +32,8 @@ const initialContentItemDetailContext: IContentItemDetailContext = {
     contentItemID: undefined,
   },
   handleItemDetailModal: () => {},
+  fetchContentItem: () => {},
+  topics: [],
 };
 
 export const ContentItemDetailContext =
@@ -37,6 +44,7 @@ export const ContentItemDetailProvider: FC<{ children: ReactNode }> = ({
 }) => {
   const [loadingContentItem, setLoadingContentItem] = useState<boolean>(false);
   const [contentItem, setContentItem] = useState<TItem | null>(null);
+  const [topics, setTopics] = useState<TTopicByCategory[]>([]);
   const [itemDetailModal, setItemDetailModal] = useState<IItemDetailModal>(
     initialContentItemDetailContext.itemDetailModal
   );
@@ -44,6 +52,26 @@ export const ContentItemDetailProvider: FC<{ children: ReactNode }> = ({
 
   const handleItemDetailModal = (data: IItemDetailModal) => {
     setItemDetailModal(data);
+  };
+
+  const fetchTopics = async () => {
+    try {
+      setLoadingContentItem(true);
+      const res = await getTopics();
+
+      if (res instanceof AxiosError) {
+        throw { message: res?.response?.data };
+      }
+
+      setTopics(groupByCategory(res.data.topics as TTopic[]));
+
+      setLoadingContentItem(false);
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
+      setLoadingContentItem(false);
+    }
   };
 
   const fetchContentItem = async (id: string) => {
@@ -68,15 +96,18 @@ export const ContentItemDetailProvider: FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     contentItemID && fetchContentItem(contentItemID);
+    fetchTopics();
   }, [contentItemID]);
 
   return (
     <ContentItemDetailContext.Provider
       value={{
         contentItem,
+        topics,
         loadingContentItem,
         itemDetailModal,
         handleItemDetailModal,
+        fetchContentItem,
       }}
     >
       {children}

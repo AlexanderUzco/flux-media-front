@@ -18,6 +18,11 @@ const deleteContentItem = async (contentItemID: string) =>
 const getContentSummary = async () =>
   API.get(`contentItem/total-items-summary`);
 
+const updateContentItem = async (
+  contentItemID: string,
+  data: TCreateContentItem
+) => API.put(`contentItem/${contentItemID}`, data);
+
 export {
   getContentItems,
   createContentItem,
@@ -25,4 +30,5 @@ export {
   deleteContentItem,
   getContentItemsByUser,
   getContentSummary,
+  updateContentItem,
 };

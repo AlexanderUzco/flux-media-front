@@ -1,18 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { XCircleIcon } from '@heroicons/react/16/solid';
+import { TImageData } from '@screens/ContentItem/types';
 
 export interface ImagePreview {
   file: File;
   preview: string;
+  isLoaded?: {
+    ref: string;
+    url: string;
+  };
 }
 
 interface ImageDropzoneProps {
   images: ImagePreview[];
+  imagesLoaded?: TImageData[];
   setImages: React.Dispatch<React.SetStateAction<ImagePreview[]>>;
 }
 
-const ImageDropzone: React.FC<ImageDropzoneProps> = ({ images, setImages }) => {
+const ImageDropzone: React.FC<ImageDropzoneProps> = ({
+  images,
+  setImages,
+  imagesLoaded,
+}) => {
   const onDrop = (acceptedFiles: File[]) => {
     if (images.length + acceptedFiles.length <= 3) {
       const newImages: ImagePreview[] = acceptedFiles.map((file) => ({
@@ -37,6 +47,17 @@ const ImageDropzone: React.FC<ImageDropzoneProps> = ({ images, setImages }) => {
   const removeImage = (index: number) => {
     setImages((prevImages) => prevImages.filter((_, i) => i !== index));
   };
+
+  useEffect(() => {
+    if (imagesLoaded && imagesLoaded.length > 0) {
+      const newImages: ImagePreview[] = imagesLoaded.map((image) => ({
+        file: new File([], image.ref),
+        preview: image.url,
+        isLoaded: image,
+      }));
+      setImages(newImages);
+    }
+  }, [imagesLoaded, setImages]);
 
   return (
     <div className='p-4 border rounded'>

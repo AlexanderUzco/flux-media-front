@@ -3,8 +3,8 @@ import Tag from '../../components/Tag';
 import { AuthContext } from '../../contexts/authContext';
 import ContentItemsCards from './components/ContentItemsCards';
 import CreateContentItemButton from './components/CreateContentItemButton';
-import ModalCreateContentItem from './components/modals/ModalCreateContentItem';
 import { ContentItemProvider } from './context/ContentItemContext';
+import ModalCreateItem from './components/modals/ModalCreateItem';
 
 const ContentItem: React.FC = () => {
   const { user } = useContext(AuthContext);
@@ -30,7 +30,7 @@ const ContentItem: React.FC = () => {
         </div>
       </div>
       <ContentItemsCards />
-      <ModalCreateContentItem />
+      <ModalCreateItem />
     </ContentItemProvider>
   );
 };

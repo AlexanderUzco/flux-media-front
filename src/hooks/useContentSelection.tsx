@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { TTopicByCategory } from '@Topic/types';
+import { TItem } from '@screens/ContentItem/types';
 
 const useContentSelection = (topics: TTopicByCategory[]) => {
   const [categorySelected, setCategorySelected] =
@@ -18,6 +19,22 @@ const useContentSelection = (topics: TTopicByCategory[]) => {
       setSelectedContentType(getFirstContentType(firstTopic.allowContent));
     }
   }, [topics]);
+
+  const handleDataItem = (data: TItem) => {
+    const category = topics.find(
+      (category) => category.category === data.topicID.categoryID.name
+    );
+    if (category) {
+      const topic = category.topics.find(
+        (topic) => topic._id === data.topicID._id
+      );
+      if (topic) {
+        setCategorySelected(category);
+        setTopicSelected(topic.allowContent);
+        setSelectedContentType(data.content.type);
+      }
+    }
+  };
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedCategory = topics.find(
@@ -63,6 +80,7 @@ const useContentSelection = (topics: TTopicByCategory[]) => {
     handleCategoryChange,
     handleTopicChange,
     handleContentTypeChange,
+    handleDataItem,
   };
 };
 

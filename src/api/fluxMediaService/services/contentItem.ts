@@ -3,6 +3,9 @@ import { TCreateContentItem } from './types';
 
 const getContentItems = async () => API.get(`contentItem`);
 
+const getContentItemsByUser = async (userID: string) =>
+  API.get(`contentItem/get-by-user/${userID}`);
+
 const getContentItem = async (contentItemID: string) =>
   API.get(`contentItem/${contentItemID}`);
 
@@ -12,9 +15,14 @@ const createContentItem = async (data: TCreateContentItem) =>
 const deleteContentItem = async (contentItemID: string) =>
   API.delete(`contentItem/${contentItemID}`);
 
+const getContentSummary = async () =>
+  API.get(`contentItem/total-items-summary`);
+
 export {
   getContentItems,
   createContentItem,
   getContentItem,
   deleteContentItem,
+  getContentItemsByUser,
+  getContentSummary,
 };

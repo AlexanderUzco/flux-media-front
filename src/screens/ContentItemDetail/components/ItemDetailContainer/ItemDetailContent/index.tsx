@@ -20,14 +20,14 @@ const ItemDetailContent = () => {
 
   return (
     <div className='p-4'>
-      {allowContent.text && (
-        <ItemDetailContentText text={contentItem?.content.text || ''} />
+      {allowContent.text && contentItem.content.type == 'text' && (
+        <ItemDetailContentText text={contentItem?.content.data || ''} />
       )}
-      {allowContent.image && (
-        <ItemDetailContentImage images={contentItem?.content.images || []} />
+      {allowContent.image && contentItem.content.type == 'image' && (
+        <ItemDetailContentImage images={contentItem?.content.data || []} />
       )}
-      {allowContent.video && (
-        <ItemDetailContentVideos videos={contentItem?.content.videos || []} />
+      {allowContent.video && contentItem.content.type == 'video' && (
+        <ItemDetailContentVideos videos={contentItem.content.data || []} />
       )}
     </div>
   );

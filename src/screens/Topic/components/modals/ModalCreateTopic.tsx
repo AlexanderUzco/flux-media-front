@@ -62,9 +62,17 @@ const ModalCreateTopic = () => {
     });
   };
 
+  const validateContentAllowed = (data: FormValues) => {
+    return data.textAllowed || data.imageAllowed || data.videoAllowed;
+  };
+
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
       setLoading(true);
+
+      if (!validateContentAllowed(data)) {
+        throw new Error('At least one Allowed content type must be selected');
+      }
 
       const topicData = {
         name: data.name,

@@ -1,10 +1,17 @@
 import { useContext } from 'react';
-import FeatureContent from '../../../components/FeatureContent';
 import { ContentItemContext } from '../context/ContentItemContext';
+import SectionItemsCategory from '@components/SectionItemsCategory';
 
 const ContentItemsCards = () => {
-  const { contentItems } = useContext(ContentItemContext);
-  return <FeatureContent features={contentItems} />;
+  const { contentItems, loadingContentItem } = useContext(ContentItemContext);
+  return (
+    <div className='mt-28'>
+      <SectionItemsCategory
+        contentItems={contentItems}
+        loading={loadingContentItem}
+      />
+    </div>
+  );
 };
 
 export default ContentItemsCards;

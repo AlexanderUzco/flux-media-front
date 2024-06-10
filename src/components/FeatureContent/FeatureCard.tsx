@@ -1,71 +1,76 @@
-import React, { useContext } from 'react';
+import { useContext, Fragment, useMemo } from 'react';
 import { Link } from 'react-router-dom'; // Importa el componente Link de React Router
-import { ArrowTopRightOnSquareIcon } from '@heroicons/react/16/solid';
 import { AuthContext } from '../../contexts/authContext';
+import { TItemContent } from '../../screens/ContentItem/types';
+import youtubeImage from '../../assets/youtube-card-logo.png';
+import textImage from '../../assets/text-card-logo.png';
+import TooltipHover from '../TooltipHover.tsx';
+import Tag from '../Tag/index.tsx';
 
 interface FeatureCardProps {
   title: string;
-  description: string;
-  linkText: string;
   topic: string;
   topicColor: string;
-  principalImage?: string;
-  contentItemID: string; // Nuevo prop para el ID del item
+  content: TItemContent;
+  contentItemID: string;
+  createdBy: string;
 }
 
 const FeatureCard: React.FC<FeatureCardProps> = ({
   title,
-  description,
   topic,
   topicColor,
-  principalImage,
+  content,
   contentItemID,
+  createdBy,
 }) => {
   const { isAuthenticated } = useContext(AuthContext);
 
-  return (
-    <Link
-      to={isAuthenticated ? `/contentItem/${contentItemID}` : '/signup'}
-      className='p-4 w-80 h-96'
-    >
-      {' '}
-      {/* Enlace a la ruta /item con el parámetro itemID */}
-      <div className='flex rounded-lg h-full dark:bg-gray-800 bg-teal-400 p-8 flex-col'>
-        <div className='flex items-center mb-3'>
-          <div className='w-8 h-8 mr-3 inline-flex items-center justify-center rounded-full dark:bg-indigo-500 bg-indigo-500 text-white flex-shrink-0'>
-            <ArrowTopRightOnSquareIcon className='w-5 h-5' />
-          </div>
-          <h2 className='text-white dark:text-white text-lg font-medium overflow-hidden truncate'>
-            {title}
-          </h2>
-        </div>
-        <div
-          className={`inline-block bg-gray-200 rounded-full px-2 py-1 text-xs font-semibold mr-2 mb-2`}
-          style={{
-            backgroundColor: 'white',
-            border: `5px solid ${topicColor}`,
-            color: topicColor,
-          }}
-        >
-          {topic}
-        </div>
+  const imageToDisplay = useMemo(() => {
+    const { type, data } = content;
 
-        <div className='flex flex-col justify-between flex-grow'>
-          <p className='leading-relaxed text-base text-white dark:text-gray-300 overflow-hidden overflow-ellipsis h-32'>
-            {description}
-          </p>
-          {principalImage && (
-            <div className='mt-2'>
-              <img
-                src={principalImage}
-                alt='Small'
-                className='w-20 h-20 rounded'
-              />
-            </div>
-          )}
-        </div>
-      </div>
-    </Link>
+    const imageSrc = {
+      image: type === 'image' && data[0].url,
+      video: youtubeImage,
+      text: textImage,
+    };
+
+    return imageSrc[content.type];
+  }, [content]);
+
+  return (
+    <TooltipHover
+      tooltipText={
+        isAuthenticated ? title : 'Please Sign in to see the content!'
+      }
+      direction='bottom'
+    >
+      <Link
+        to={isAuthenticated ? `/contentItem/${contentItemID}` : '/signin'}
+        className='p-4 w-96'
+      >
+        <article className='relative isolate flex flex-col justify-end overflow-hidden rounded-2xl px-8 pb-8 pt-40 max-w-sm mx-auto shadow-md'>
+          <Fragment>
+            <img
+              src={imageToDisplay}
+              alt={title}
+              className='absolute inset-0 h-full w-full object-cover'
+            />
+          </Fragment>
+          <div className='absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/80'></div>
+          <h3 className='z-10 mt-3 text-3xl font-bold text-white truncate'>
+            {title} {content.type}
+          </h3>
+          <Tag
+            text={topic}
+            color={topicColor}
+          />
+          <div className='z-10 gap-y-1 overflow-hidden text-sm leading-6 text-gray-300'>
+            Credits: {createdBy}
+          </div>
+        </article>
+      </Link>
+    </TooltipHover>
   );
 };
 

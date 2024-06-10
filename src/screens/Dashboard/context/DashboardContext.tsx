@@ -1,17 +1,29 @@
 import { createContext, FC, ReactNode, useEffect, useState } from 'react';
-import { TItem } from '../../ContentItem/types';
 import { AxiosError } from 'axios';
-import { getContentItems } from '../../../api/fluxMediaService/services/contentItem';
+import {
+  getContentItems,
+  getContentSummary,
+} from '@api/fluxMediaService/services/contentItem';
 import { toast } from 'react-toastify';
+import { TContentItemSummary, TItem } from '@screens/ContentItem/types';
 
 export interface IDashboardContext {
-  loadingDashboard: boolean;
+  loadingContentItems: boolean;
+  loadingContentItemSummary: boolean;
   contentItems: TItem[];
+  contentItemSummary: TContentItemSummary;
 }
 
 const initialDashboardContext: IDashboardContext = {
-  loadingDashboard: false,
+  loadingContentItems: false,
+  loadingContentItemSummary: false,
   contentItems: [],
+  contentItemSummary: {
+    contentItems: 0,
+    images: 0,
+    videos: 0,
+    text: 0,
+  },
 };
 
 export const DashboardContext = createContext<IDashboardContext>(
@@ -21,12 +33,17 @@ export const DashboardContext = createContext<IDashboardContext>(
 export const DashboardProvider: FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [loadingDashboard, setLoadingDashboard] = useState<boolean>(false);
+  const [loadingContentItems, setLoadingContentItems] =
+    useState<boolean>(false);
   const [contentItems, setContentItems] = useState<TItem[]>([]);
+  const [loadingContentItemSummary, setLoadingContentItemSummary] =
+    useState<boolean>(false);
+  const [contentItemSummary, setContentItemSummary] =
+    useState<TContentItemSummary>(initialDashboardContext.contentItemSummary);
 
   const fetchContentItems = async () => {
     try {
-      setLoadingDashboard(true);
+      setLoadingContentItems(true);
       const res = await getContentItems();
 
       if (res instanceof AxiosError) {
@@ -35,24 +52,48 @@ export const DashboardProvider: FC<{ children: ReactNode }> = ({
 
       setContentItems(res.data.contentItems as TItem[]);
 
-      setLoadingDashboard(false);
+      setLoadingContentItems(false);
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
       }
-      setLoadingDashboard(false);
+      setLoadingContentItems(false);
+    }
+  };
+
+  const fetchContentItemSummary = async () => {
+    try {
+      setLoadingContentItemSummary(true);
+      const res = await getContentSummary();
+
+      if (res instanceof AxiosError) {
+        throw { message: res?.response?.data };
+      }
+
+      console.log(res.data.totalItemsSummary);
+      setContentItemSummary(res.data.totalItemsSummary as TContentItemSummary);
+
+      setLoadingContentItemSummary(false);
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
+      setLoadingContentItemSummary(false);
     }
   };
 
   useEffect(() => {
     fetchContentItems();
+    fetchContentItemSummary();
   }, []);
 
   return (
     <DashboardContext.Provider
       value={{
-        loadingDashboard,
+        loadingContentItems,
+        loadingContentItemSummary,
         contentItems,
+        contentItemSummary,
       }}
     >
       {children}

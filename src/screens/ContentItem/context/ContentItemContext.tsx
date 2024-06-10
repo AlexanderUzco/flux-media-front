@@ -1,10 +1,22 @@
-import { createContext, FC, ReactNode, useEffect, useState } from 'react';
+import {
+  createContext,
+  FC,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { TItem } from '../types';
 import { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
-import { getContentItems } from '../../../api/fluxMediaService/services/contentItem';
-import { TTopic } from '../../Topic/types';
+import {
+  getContentItems,
+  getContentItemsByUser,
+} from '../../../api/fluxMediaService/services/contentItem';
+import { TTopic, TTopicByCategory } from '../../Topic/types';
 import { getTopics } from '../../../api/fluxMediaService/services/topic';
+import { AuthContext } from '../../../contexts/authContext';
+import { groupByCategory } from '../utils/topic';
 
 export interface IContentItemModal {
   open: boolean;
@@ -14,7 +26,7 @@ export interface IContentItemModal {
 export interface IContentItemContext {
   loadingContentItem: boolean;
   contentItems: TItem[];
-  topics: TTopic[];
+  topics: TTopicByCategory[];
   contentItemModal: IContentItemModal;
   handleContentItemModal: (data: IContentItemModal) => void;
   fetchContentItems: () => void;
@@ -39,9 +51,10 @@ export const ContentItemContext = createContext<IContentItemContext>(
 export const ContentItemProvider: FC<{ children: ReactNode }> = ({
   children,
 }) => {
+  const { user } = useContext(AuthContext);
   const [loadingContentItem, setLoadingContentItem] = useState<boolean>(false);
   const [contentItems, setContentItems] = useState<TItem[]>([]);
-  const [topics, setTopics] = useState<TTopic[]>([]);
+  const [topics, setTopics] = useState<TTopicByCategory[]>([]);
   const [contentItemModal, setContentItemModal] = useState<IContentItemModal>(
     initialContentItemContext.contentItemModal
   );
@@ -53,13 +66,27 @@ export const ContentItemProvider: FC<{ children: ReactNode }> = ({
   const fetchContentItems = async () => {
     try {
       setLoadingContentItem(true);
-      const res = await getContentItems();
 
-      if (res instanceof AxiosError) {
-        throw { message: res?.response?.data };
+      if (!user) {
+        throw new Error('User not found');
       }
 
-      setContentItems(res.data.contentItems as TItem[]);
+      if (user.role === 'ADMIN') {
+        const res = await getContentItems();
+        if (res instanceof AxiosError) {
+          throw { message: res?.response?.data };
+        }
+
+        setContentItems(res.data.contentItems as TItem[]);
+      }
+
+      if (user.role === 'WRITER') {
+        const res = await getContentItemsByUser(user.id);
+        if (res instanceof AxiosError) {
+          throw { message: res?.response?.data };
+        }
+        setContentItems(res.data.contentItems as TItem[]);
+      }
 
       setLoadingContentItem(false);
     } catch (error) {
@@ -79,7 +106,7 @@ export const ContentItemProvider: FC<{ children: ReactNode }> = ({
         throw { message: res?.response?.data };
       }
 
-      setTopics(res.data.topics as TTopic[]);
+      setTopics(groupByCategory(res.data.topics as TTopic[]));
 
       setLoadingContentItem(false);
     } catch (error) {
@@ -93,7 +120,9 @@ export const ContentItemProvider: FC<{ children: ReactNode }> = ({
   useEffect(() => {
     fetchContentItems();
     fetchTopics();
-  }, []);
+    // fetchContentItems don't need to be in the dependency array because it's not changing
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   return (
     <ContentItemContext.Provider

@@ -3,8 +3,8 @@ import { ArrowLeftStartOnRectangleIcon } from '@heroicons/react/16/solid';
 import { UserCircleIcon } from '@heroicons/react/16/solid';
 import { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../../contexts/authContext';
-import logo from '../../../assets/logo.png';
+import { AuthContext } from '@contexts/authContext';
+import logo from '@assets/logo.png';
 import { AdjustmentsHorizontalIcon } from '@heroicons/react/16/solid';
 
 const Navbar = () => {
@@ -14,7 +14,7 @@ const Navbar = () => {
 
   const handleLogout = async () => signoutContext();
 
-  const handleSignup = () => navigator('/signup');
+  const handleSignin = () => navigator('/signin');
 
   const handleDasoboard = () => navigator('/');
 
@@ -32,7 +32,8 @@ const Navbar = () => {
       <img
         src={logo}
         alt='Logo'
-        className='w-12 md:mx-auto md:hidden'
+        className='w-12 md:mx-auto md:hidden cursor-pointer'
+        onClick={handleDasoboard}
       />
       <div>
         {isAuthenticated ? (
@@ -43,7 +44,7 @@ const Navbar = () => {
         ) : (
           <UserCircleIcon
             className='hidden md:block h-6 w-6 cursor-pointer hover:text-gray-400 transition duration-200'
-            onClick={handleSignup}
+            onClick={handleSignin}
           />
         )}
 
@@ -100,12 +101,21 @@ const Navbar = () => {
 
             {/* Create signout button */}
             <MenuItem>
-              <button
-                onClick={handleLogout}
-                className='block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-100 w-full text-left'
-              >
-                Sign out
-              </button>
+              {isAuthenticated ? (
+                <button
+                  onClick={handleLogout}
+                  className='block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-100 w-full text-left'
+                >
+                  Sign out
+                </button>
+              ) : (
+                <button
+                  onClick={handleSignin}
+                  className='block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-100 w-full text-left'
+                >
+                  Sign In
+                </button>
+              )}
             </MenuItem>
           </MenuItems>
         </Menu>

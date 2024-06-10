@@ -1,43 +1,29 @@
-import React, { useState } from 'react';
-import { TItemFile } from '../../../../ContentItem/types';
+import { TImageData } from '@screens/ContentItem/types';
+import { FC } from 'react';
+import { PhotoProvider, PhotoView } from 'react-photo-view';
 
 interface ItemDetailContentImageProps {
-  images: TItemFile[];
+  images: TImageData[];
 }
 
-const ItemDetailContentImage: React.FC<ItemDetailContentImageProps> = ({
+const ItemDetailContentImage: FC<ItemDetailContentImageProps> = ({
   images,
 }) => {
-  const [active, setActive] = useState(images[0]?.url || '');
-
   return (
-    <div className='grid gap-4 mt-5'>
-      {active && (
-        <div>
-          <img
-            className='w-[600px] rounded-lg md:h-[480px]'
-            src={active}
-            alt=''
-          />
-        </div>
-      )}
-
-      <div className='flex'>
-        {images.map(({ url }, index) => (
-          <div
-            key={index}
-            className='m-1'
-          >
+    <PhotoProvider>
+      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
+        {images.map((image, index) => (
+          <PhotoView src={image.url}>
             <img
-              onClick={() => setActive(url)}
-              src={url}
-              className='h-40 max-w-full cursor-pointer rounded-lg object-cover object-center'
-              alt='gallery-image'
+              src={image.url}
+              className={`w-full h-full object-cover rounded-lg`}
+              alt={`gallery-image-${index}`}
+              loading='lazy'
             />
-          </div>
+          </PhotoView>
         ))}
       </div>
-    </div>
+    </PhotoProvider>
   );
 };
 

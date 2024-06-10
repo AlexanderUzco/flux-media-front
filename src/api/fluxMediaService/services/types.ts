@@ -1,3 +1,5 @@
+import { TItemContent } from '../../../screens/ContentItem/types';
+
 export type TSignupData = {
   username: string;
   email: string;
@@ -36,11 +38,7 @@ export type TCreateTopic = {
 export type TCreateContentItem = {
   title: string;
   topicID: string;
-  content: {
-    text?: string;
-    videos?: string[];
-    images?: string[];
-  };
+  content: TItemContent | null;
   createdBy: string;
 };
 

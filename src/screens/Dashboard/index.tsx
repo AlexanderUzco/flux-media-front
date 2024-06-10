@@ -1,5 +1,6 @@
 import { DashboardProvider } from './context/DashboardContext';
-import ContentItemsCards from './components/ContentItemsCards';
+import DashboardContentItemsCards from './components/DashboardContentItemsCards';
+import DashboardSummary from './components/DashboardSummary';
 
 const Dashboard = () => {
   return (
@@ -11,7 +12,8 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      <ContentItemsCards />
+      <DashboardSummary />
+      <DashboardContentItemsCards />
     </DashboardProvider>
   );
 };

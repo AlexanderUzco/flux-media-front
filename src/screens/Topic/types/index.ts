@@ -15,3 +15,8 @@ export type TTopic = {
   allowContent: TAllotment;
   createdBy: TUser;
 };
+
+export type TTopicByCategory = {
+  category: string;
+  topics: TTopic[];
+};

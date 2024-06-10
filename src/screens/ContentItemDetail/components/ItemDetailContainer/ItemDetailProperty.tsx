@@ -37,18 +37,19 @@ const ItemDetailProperty = () => {
         <span className='text-sm font-medium'>
           {contentItem?.topicID?.name || 'No Topic'}
         </span>
-        {isAuthenticated && user?.role === 'ADMIN' && (
-          <TrashIcon
-            className='h-5 w-5 text-red-500 cursor-pointer ml-auto'
-            onClick={() =>
-              handleItemDetailModal({
-                type: 'delete',
-                open: true,
-                contentItemID: contentItem?._id,
-              })
-            }
-          />
-        )}
+        {isAuthenticated &&
+          (user?.role === 'ADMIN' || contentItem.createdBy.id == user.id) && (
+            <TrashIcon
+              className='h-5 w-5 text-red-500 cursor-pointer ml-auto'
+              onClick={() =>
+                handleItemDetailModal({
+                  type: 'delete',
+                  open: true,
+                  contentItemID: contentItem?._id,
+                })
+              }
+            />
+          )}
       </div>
     </div>
   );

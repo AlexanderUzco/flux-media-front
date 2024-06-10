@@ -8,7 +8,7 @@ Para más información sobre cómo desplegar aplicaciones en Vercel, consulta su
 
 # Servicio API
 
-El proyecto esta conectado a la api [Flux Media](flux-media-api-production.up.railway.app) desplegado con [Railway](https://railway.app/)
+El proyecto esta conectado a la api [Flux Media](https://flux-media-api-production.up.railway.app/) desplegado con [Railway](https://railway.app/)
 
 Repositorio: [ds-flux-media-service](https://github.com/AlexanderUzco/ds-flux-media-service)
 

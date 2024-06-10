@@ -80,6 +80,10 @@ const ModalCreateContentItem: FC<IModalCreateContentItemProps> = ({
         setUrlVideos(item.content.data);
       }
 
+      if (item.content.type === 'text') {
+        setValue('description', item.content.data);
+      }
+
       handleDataItem(item);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

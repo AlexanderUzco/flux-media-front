@@ -21,7 +21,7 @@ const Navbar = () => {
 
   return (
     <div className='w-full bg-gray-900 text-white p-4 flex justify-between items-center'>
-      <div className='flex'>
+      <div className='flex items-center'>
         <h1
           className='text-xl font-bold hidden md:block cursor-pointer mr-2'
           onClick={handleDasoboard}

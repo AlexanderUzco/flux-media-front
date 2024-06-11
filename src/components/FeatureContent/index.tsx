@@ -13,7 +13,7 @@ const FeatureContent: React.FC<FeatureContentProps> = ({
   loading,
 }) => {
   return (
-    <div className='flex justify-center mt-24 min-w-full divide-y divide-gray-200 '>
+    <div className='flex justify-center mt-10 min-w-full divide-y divide-gray-200 '>
       <div className='flex flex-wrap justify-center max-w-7xl w-full'>
         {loading ? (
           <FeatureSuspenseContent numCards={3} />

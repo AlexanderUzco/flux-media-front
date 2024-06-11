@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '@contexts/authContext';
 import logo from '@assets/logo.png';
 import { AdjustmentsHorizontalIcon } from '@heroicons/react/16/solid';
+import Tag from '@components/Tag';
 
 const Navbar = () => {
   // Auth context
@@ -22,11 +23,19 @@ const Navbar = () => {
     <div className='w-full bg-gray-900 text-white p-4 flex justify-between items-center'>
       <div className='flex'>
         <h1
-          className='text-xl font-bold hidden md:block cursor-pointer'
+          className='text-xl font-bold hidden md:block cursor-pointer mr-2'
           onClick={handleDasoboard}
         >
           Flux Media
         </h1>
+        {user && user.role === 'ADMIN' && (
+          <Tag
+            text='Admin'
+            color='#00ff6e'
+            transparent
+            className='hidden md:block'
+          />
+        )}
       </div>
 
       <img
@@ -58,6 +67,16 @@ const Navbar = () => {
               'bg-white text-gray-900 w-32 mt-2 rounded shadow-lg z-[100]'
             }
           >
+            {user && user.role === 'ADMIN' && (
+              <div className='w-full flex item-center my-2'>
+                <Tag
+                  text='Admin'
+                  color='#00ff6e'
+                  transparent
+                  className='m-auto'
+                />
+              </div>
+            )}
             <MenuItem>
               <Link
                 to='/'

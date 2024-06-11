@@ -59,7 +59,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
           </Fragment>
           <div className='absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/80'></div>
           <h3 className='z-10 mt-3 text-3xl font-bold text-white truncate'>
-            {title} {content.type}
+            {title}
           </h3>
           <Tag
             text={topic}
